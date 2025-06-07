@@ -26,7 +26,8 @@ Multi-language support (English en/, Hindi hi/, Bengali bn/, Marathi mr/, Tamil 
 
 📂 Repository Structure
 
-whatsapp-prompts/
+```
+mental_health_prompts/
 ├── README.md            # This file
 ├── LICENSE              # Open-source license
 ├── prompts/
@@ -47,6 +48,7 @@ whatsapp-prompts/
 └── scripts/
     └── validate_locale.py  # (Optional) Check consistency & length limits
 
+```
 🤝 Contributing
 
 We welcome contributions from developers, translators, and mental-health professionals:
