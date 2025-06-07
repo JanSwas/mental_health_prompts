@@ -1,4 +1,5 @@
 Over the last 2 weeks, how often have you been unable to stop or control worrying?
+Type the number and Send
 1. Not at all
 2. Several days
 3. More than half the days
