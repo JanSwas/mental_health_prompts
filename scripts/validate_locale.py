@@ -26,6 +26,7 @@ def validate_locales(prompts_dir: str = DEFAULT_PROMPTS_DIR) -> list:
             diff = entries.symmetric_difference(master_files)
             errors.append(f"[Structure] Language '{lang}' has files {diff} missing or extra.")
 
+        # Check each file for length and trailing whitespace
         for fname in files:
             path = os.path.join(lang_dir, fname)
             if not os.path.isfile(path):
