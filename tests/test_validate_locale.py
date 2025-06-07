@@ -25,7 +25,7 @@ def test_validate_locale_handles_directories(tmp_path):
     for lang in languages:
         os.makedirs(os.path.join(prompts_dir, lang, 'extra_dir'))
 
-    # Old logic without an os.path.isfile check would raise IsADirectoryError
+    # Old logic without an os.path.isfile check would raise IsADirectoryError (or PermissionError on Windows)
     def old_validate():
         for lang in languages:
             lang_dir = os.path.join(prompts_dir, lang)
@@ -34,7 +34,13 @@ def test_validate_locale_handles_directories(tmp_path):
                 with open(path, 'r', encoding='utf-8'):
                     pass
 
-    with pytest.raises(IsADirectoryError):
+    import errno
+    import sys
+    expected_errors = (IsADirectoryError,)
+    if sys.platform.startswith('win'):
+        expected_errors = (IsADirectoryError, PermissionError)
+
+    with pytest.raises(expected_errors):
         old_validate()
 
     # The current implementation should succeed without errors

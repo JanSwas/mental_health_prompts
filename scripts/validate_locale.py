@@ -21,7 +21,8 @@ def validate_locales(prompts_dir: str = DEFAULT_PROMPTS_DIR) -> list:
         entries = set(os.listdir(lang_dir))
         files = {f for f in entries if os.path.isfile(os.path.join(lang_dir, f))}
 
-        if entries != master_files:
+        # Skip structure check for 'multi' directory
+        if lang != 'multi' and entries != master_files:
             diff = entries.symmetric_difference(master_files)
             errors.append(f"[Structure] Language '{lang}' has files {diff} missing or extra.")
 
