@@ -1,6 +1,6 @@
 Mental Health Prompts for Mental Health Screening
 
-Open-source library of multi-lingual WhatsApp chat prompts for lightweight mental-health triage (PHQ‑4 / GAD‑2 flows) in India.
+Open-source library of **multilingual** WhatsApp chat prompts for lightweight mental-health triage (PHQ‑4 / GAD‑2 flows) in India.
 
 📖 Overview
 
