@@ -1,6 +1,5 @@
 import os
 import sys
-import glob
 import re
 
 # Configuration
@@ -20,7 +19,7 @@ for lang in LANG_CODES:
     if entries != MASTER_FILES:
         diff = entries.symmetric_difference(MASTER_FILES)
         errors.append(f"[Structure] Language '{lang}' has files {diff} missing or extra.")
-    # Check each file length
+    # Check each file for length and trailing whitespace
     for fname in files:
         path = os.path.join(lang_dir, fname)
         with open(path, 'r', encoding='utf-8') as f:
