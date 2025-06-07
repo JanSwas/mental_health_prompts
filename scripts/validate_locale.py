@@ -5,7 +5,6 @@ import re
 DEFAULT_PROMPTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'prompts')
 MAX_LENGTH = 600
 
-
 def validate_locales(prompts_dir: str = DEFAULT_PROMPTS_DIR) -> list:
     """Validate locale files under prompts_dir.
 
