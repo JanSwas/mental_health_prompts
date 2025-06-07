@@ -47,3 +47,27 @@ def test_validate_locale_handles_directories(tmp_path):
     errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
     assert errors == []
 
+
+def test_missing_subdirectory_file_detected(tmp_path):
+    prompts_dir = setup_prompts(tmp_path)
+
+    os.remove(os.path.join(prompts_dir, 'hi', 'responses', 'score_green.md'))
+
+    errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
+    assert any('responses/score_green.md' in e for e in errors)
+
+
+def test_trailing_whitespace_detected(tmp_path):
+    prompts_dir = setup_prompts(tmp_path)
+
+    file_path = os.path.join(prompts_dir, 'hi', 'greeting.md')
+    with open(file_path, 'a', encoding='utf-8') as f:
+        f.write('  ')
+
+    errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
+    assert any('Trailing whitespace' in e for e in errors)
+
+
+def test_default_prompts_dir_absolute():
+    assert os.path.isabs(validate_locale.DEFAULT_PROMPTS_DIR)
+
