@@ -35,9 +35,16 @@ def validate_locales(prompts_dir: str = DEFAULT_PROMPTS_DIR) -> list:
         # Skip structure check for 'multi' directory
         if lang != 'multi' and file_set != master_files:
             diff = file_set.symmetric_difference(master_files)
-            errors.append(
-                f"[Structure] Language '{lang}' has files {diff} missing or extra."
-            )
+            for missing_file in sorted(master_files - file_set):
+                norm_missing = missing_file.replace('\\', '/')
+                errors.append(
+                    f"[Structure] Language '{lang}' is missing file: {norm_missing}"
+                )
+            for extra_file in sorted(file_set - master_files):
+                norm_extra = extra_file.replace('\\', '/')
+                errors.append(
+                    f"[Structure] Language '{lang}' has extra file: {norm_extra}"
+                )
 
         # Check each file for length and trailing whitespace
         for fname in file_set:
@@ -52,6 +59,20 @@ def validate_locales(prompts_dir: str = DEFAULT_PROMPTS_DIR) -> list:
                     f"[Length] {lang}/{fname} is {length} chars (max {MAX_LENGTH}).")
             if re.search(r"[ \t]+$", content, re.MULTILINE):
                 errors.append(f"[Formatting] Trailing whitespace in {lang}/{fname}.")
+
+    # Also validate files directly under prompts_dir (not in language subfolders)
+    top_level_files = [f for f in os.listdir(prompts_dir)
+                       if os.path.isfile(os.path.join(prompts_dir, f))]
+    for fname in top_level_files:
+        path = os.path.join(prompts_dir, fname)
+        with open(path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        length = len(content.rstrip('\n'))
+        if length > MAX_LENGTH:
+            errors.append(
+                f"[Length] {fname} is {length} chars (max {MAX_LENGTH}).")
+        if re.search(r"[ \t]+$", content, re.MULTILINE):
+            errors.append(f"[Formatting] Trailing whitespace in {fname}.")
 
     return errors
 

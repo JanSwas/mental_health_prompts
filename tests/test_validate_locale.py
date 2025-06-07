@@ -54,18 +54,28 @@ def test_missing_subdirectory_file_detected(tmp_path):
     os.remove(os.path.join(prompts_dir, 'hi', 'responses', 'score_green.md'))
 
     errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
-    assert any('responses/score_green.md' in e for e in errors)
+    print('Validation errors:', errors)  # Debug print
+    assert any('responses/score_green.md' in e for e in errors), f"Actual errors: {errors}"
 
 
 def test_trailing_whitespace_detected(tmp_path):
     prompts_dir = setup_prompts(tmp_path)
 
+    # Test for a language file
     file_path = os.path.join(prompts_dir, 'hi', 'greeting.md')
     with open(file_path, 'a', encoding='utf-8') as f:
         f.write('  ')
 
     errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
     assert any('Trailing whitespace' in e for e in errors)
+
+    # Test for a top-level file
+    top_file_path = os.path.join(prompts_dir, 'new_user_greeting.md')
+    with open(top_file_path, 'a', encoding='utf-8') as f:
+        f.write('  ')
+
+    errors = validate_locale.validate_locales(prompts_dir=prompts_dir)
+    assert any('Trailing whitespace in new_user_greeting.md' in e for e in errors)
 
 
 def test_default_prompts_dir_absolute():
