@@ -13,10 +13,13 @@ errors = []
 
 for lang in LANG_CODES:
     lang_dir = os.path.join(PROMPTS_DIR, lang)
-    files = set(os.listdir(lang_dir))
+    entries = set(os.listdir(lang_dir))
+    files = {f for f in entries if os.path.isfile(os.path.join(lang_dir, f))}
+    subdirs = {d for d in entries if os.path.isdir(os.path.join(lang_dir, d))}
     # Check same filenames
-    if files != MASTER_FILES:
-        errors.append(f"[Structure] Language '{lang}' has files {files.symmetric_difference(MASTER_FILES)} missing or extra.")
+    if entries != MASTER_FILES:
+        diff = entries.symmetric_difference(MASTER_FILES)
+        errors.append(f"[Structure] Language '{lang}' has files {diff} missing or extra.")
     # Check each file length
     for fname in files:
         path = os.path.join(lang_dir, fname)
